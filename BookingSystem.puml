@@ -1,0 +1,31 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam sequenceParticipantBorderColor #000000
+
+participant "User" as user
+participant "Web Server" as web
+participant "API Gateway" as api
+participant "Movie Service" as movie
+participant "Theatre Service" as theatre
+participant "Booking Service" as booking
+participant "Payment Gateway" as payment
+participant "Database" as db
+participant "Message Queue" as mq
+
+user->>web: Request
+web->>api: Request
+api->>movie: Request
+api->>theatre: Request
+api->>booking: Request
+
+movie->>db: Query
+theatre->>db: Query
+booking->>db: Query
+
+booking->>payment: Request
+payment->>booking: Response
+
+booking->>mq: Produce
+mq->>theatre: Consume
+
+@enduml
